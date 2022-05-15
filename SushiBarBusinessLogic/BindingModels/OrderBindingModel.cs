@@ -9,8 +9,6 @@ namespace SushiBarBusinessLogic.BindingModels
     {
         public int? Id { get; set; }
 
-        public string SushiName { get; set; }
-
         public int SushiId { get; set; }
 
         public int Count { get; set; }
