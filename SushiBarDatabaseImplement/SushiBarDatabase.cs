@@ -9,7 +9,7 @@ namespace SushiBarDatabaseImplement
         {
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=(LocalDb)\v11.0;Initial Catalog=SushiBarDatabase;Integrated Security=True;MultipleActiveResultSets=True;");
+                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-48E31M6;Initial Catalog=SushiBarDatabase;Integrated Security=True;MultipleActiveResultSets=True;");
             }
             base.OnConfiguring(optionsBuilder);
         }
@@ -19,5 +19,6 @@ namespace SushiBarDatabaseImplement
         public virtual DbSet<Order> Orders { set; get; }
         public virtual DbSet<Client> Clients { set; get; }
         public virtual DbSet<Cook> Cooks { set; get; }
+        public virtual DbSet<MessageInfo> Messages { set; get; }
     }
 }

@@ -10,8 +10,8 @@ using SushiBarDatabaseImplement;
 namespace SushiBarDatabaseImplement.Migrations
 {
     [DbContext(typeof(SushiBarDatabase))]
-    [Migration("20220507162245_first")]
-    partial class first
+    [Migration("20220606145641_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,51 @@ namespace SushiBarDatabaseImplement.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("SushiBarDatabaseImplement.Models.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClientFIO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("SushiBarDatabaseImplement.Models.Cook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CookFIO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PauseTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkingTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cooks");
+                });
 
             modelBuilder.Entity("SushiBarDatabaseImplement.Models.Ingredient", b =>
                 {
@@ -37,12 +82,45 @@ namespace SushiBarDatabaseImplement.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("SushiBarDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateDelivery")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("SushiBarDatabaseImplement.Models.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CookId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -63,6 +141,10 @@ namespace SushiBarDatabaseImplement.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CookId");
 
                     b.HasIndex("SushiId");
 
@@ -113,9 +195,26 @@ namespace SushiBarDatabaseImplement.Migrations
                     b.ToTable("SushiIngredients");
                 });
 
+            modelBuilder.Entity("SushiBarDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.HasOne("SushiBarDatabaseImplement.Models.Client", "Client")
+                        .WithMany("Messages")
+                        .HasForeignKey("ClientId");
+                });
+
             modelBuilder.Entity("SushiBarDatabaseImplement.Models.Order", b =>
                 {
-                    b.HasOne("SushiBarDatabaseImplement.Models.Sushi", null)
+                    b.HasOne("SushiBarDatabaseImplement.Models.Client", "Client")
+                        .WithMany("Orders")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SushiBarDatabaseImplement.Models.Cook", "Cook")
+                        .WithMany("Order")
+                        .HasForeignKey("CookId");
+
+                    b.HasOne("SushiBarDatabaseImplement.Models.Sushi", "Sushi")
                         .WithMany("Orders")
                         .HasForeignKey("SushiId")
                         .OnDelete(DeleteBehavior.Cascade)
