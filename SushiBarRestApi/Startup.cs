@@ -36,10 +36,10 @@ namespace SushiBarRestApi
             services.AddControllers().AddNewtonsoftJson();
             MailLogic.MailConfig(new MailConfig
             {
-                SmtpClientHost = "smtp.gmail.com",
-                SmtpClientPort = 587,
-                MailLogin = "lab7hgfhf@gmail.com",
-                MailPassword = "kiriena2806",
+                SmtpClientHost = "smtp.yandex.ru",
+                SmtpClientPort = 456,
+                MailLogin = "laba8wq@yandex.ru",
+                MailPassword = "taback2001",
             });
 
         }
@@ -49,8 +49,8 @@ namespace SushiBarRestApi
         {
             var timer = new Timer(new TimerCallback(MailCheck), new MailCheckInfo
             {
-                PopHost = "pop.gmail.com",
-                PopPort = 995,
+                PopHost = "imap.yandex.ru",
+                PopPort = 993,
                 Storage = messageInfoStorage
             }, 0, 100000);
             if (env.IsDevelopment())

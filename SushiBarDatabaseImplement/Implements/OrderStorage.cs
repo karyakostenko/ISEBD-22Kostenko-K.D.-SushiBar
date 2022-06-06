@@ -75,7 +75,7 @@ namespace SushiBarDatabaseImplement.Implements
                     CookId = order.CookId,
                     SushiName = context.Sushis.Include(pr => pr.Orders).FirstOrDefault(rec => rec.Id == order.SushiId)?.SushiName,
                     ClientFIO = context.Clients.Include(pr => pr.Orders).FirstOrDefault(rec => rec.Id == order.ClientId)?.ClientFIO,
-                    CookFIO = order.Cook?.CookFIO,
+                    CookFIO = context.Cooks.Include(pr => pr.Order).FirstOrDefault(rec => rec.Id == order.CookId)?.CookFIO,
                     Count = order.Count,
                     Sum = order.Sum,
                     Status = order.Status,
